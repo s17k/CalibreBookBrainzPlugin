@@ -9,7 +9,7 @@ __docformat__ = 'restructuredtext en'
 
 from PyQt5.Qt import QDialog, QVBoxLayout, QPushButton, QMessageBox, QLabel
 
-from calibre_plugins.interface_demo.config import prefs
+from calibre_plugins.CalibreBookBrainzPlugin.config import prefs
 
 class DemoDialog(QDialog):
 

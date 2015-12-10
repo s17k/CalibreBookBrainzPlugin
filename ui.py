@@ -15,7 +15,7 @@ if False:
 
 # The class that all interface action plugins must inherit from
 from calibre.gui2.actions import InterfaceAction
-from calibre_plugins..main import DemoDialog
+from calibre_plugins.CalibreBookBrainzPlugin.main import DemoDialog
 
 class InterfacePlugin(InterfaceAction):
 
@@ -45,7 +45,7 @@ class InterfacePlugin(InterfaceAction):
         d.show()
 
     def apply_settings(self):
-        from calibre_plugins..config import prefs
+        from calibre_plugins.CalibreBookBrainzPlugin.config import prefs
         # In an actual non trivial plugin, you would probably need to
         # do something based on the settings in prefs
         prefs
