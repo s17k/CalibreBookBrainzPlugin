@@ -19,7 +19,7 @@ from calibre.utils.config import JSONConfig
 prefs = JSONConfig('plugins/CalibreBookBrainzPlugin')
 
 # Set defaults
-prefs.defaults['hello_world_msg'] = 'Hello, World!'
+prefs.defaults['searchinbookbrainz'] = 'Search in Book Brainz Database'
 
 class ConfigWidget(QWidget):
 
@@ -37,5 +37,5 @@ class ConfigWidget(QWidget):
         self.label.setBuddy(self.msg)
 
     def save_settings(self):
-        prefs['hello_world_msg'] = unicode(self.msg.text())
+        prefs['searchinbookbrainz'] = unicode(self.msg.text())
 

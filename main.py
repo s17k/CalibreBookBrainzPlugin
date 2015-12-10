@@ -7,7 +7,8 @@ __license__   = 'MIT'
 __copyright__ = '2015 Stanislaw Szczesniak'
 __docformat__ = 'restructuredtext en'
 
-from PyQt5.Qt import QDialog, QVBoxLayout, QPushButton, QMessageBox, QLabel
+from PyQt5.Qt import QDialog, QVBoxLayout, QPushButton, QMessageBox, QLabel, QLineEdit, QListWidget, QListWidgetItem
+import requests
 
 from calibre_plugins.CalibreBookBrainzPlugin.config import prefs
 
@@ -28,15 +29,28 @@ class DemoDialog(QDialog):
         self.l = QVBoxLayout()
         self.setLayout(self.l)
 
-        self.label = QLabel(prefs['hello_world_msg'])
+        self.label = QLabel(prefs['searchinbookbrainz'])
         self.l.addWidget(self.label)
 
-        self.setWindowTitle('Interface Plugin Demo')
+        self.setWindowTitle('Calibre Book Brainz Integration')
         self.setWindowIcon(icon)
 
-        self.about_button = QPushButton('About', self)
-        self.about_button.clicked.connect(self.about)
+        self.search_space =  QLineEdit()
+        self.l.addWidget(self.search_space)
+
+        self.listWidget = QListWidget()
+        for i in range(10):
+            item = QListWidgetItem("Item %i" % i)
+            self.listWidget.addItem(item)
+        self.l.addWidget(self.listWidget)
+
+        self.about_button = QPushButton('Search', self)
+        self.about_button.clicked.connect(self.search)
         self.l.addWidget(self.about_button)
+
+
+
+
         #
         # self.marked_button = QPushButton(
         #     'Show books with only one format in the calibre GUI', self)
@@ -60,20 +74,34 @@ class DemoDialog(QDialog):
         #
         self.resize(self.sizeHint())
 
-    # def about(self):
-    #     # Get the about text from a file inside the plugin zip file
-    #     # The get_resources function is a builtin function defined for all your
-    #     # plugin code. It loads files from the plugin zip file. It returns
-    #     # the bytes from the specified file.
-    #     #
-    #     # Note that if you are loading more than one file, for performance, you
-    #     # should pass a list of names to get_resources. In this case,
-    #     # get_resources will return a dictionary mapping names to bytes. Names that
-    #     # are not found in the zip file will not be in the returned dictionary.
-    #     text = get_resources('about.txt')
-    #     QMessageBox.about(self, 'About the Interface Plugin Demo',
-    #             text.decode('utf-8'))
-    #
+    def search(self):
+        text=self.search_space.text()
+        print(text)
+        self.listWidget.clear()
+        self.listWidget.setFocus()
+        r = requests.get("https://bookbrainz.org/ws/search/?q=\"" + text + "\"&mode=\"search\"")
+        hits = r.json()['hits']
+        numQueries = len(hits)
+        for i in range(numQueries) :
+            item = QListWidgetItem("%i. %s" %((i+1),hits[i]['_source']['default_alias']['name']))
+            self.listWidget.addItem(item)
+        self.listWidget.setFocus()
+
+
+    def about(self):
+        # Get the about text from a file inside the plugin zip file
+        # The get_resources function is a builtin function defined for all your
+        # plugin code. It loads files from the plugin zip file. It returns
+        # the bytes from the specified file.
+        #
+        # Note that if you are loading more than one file, for performance, you
+        # should pass a list of names to get_resources. In this case,
+        # get_resources will return a dictionary mapping names to bytes. Names that
+        # are not found in the zip file will not be in the returned dictionary.
+        text = get_resources('about.txt')
+        QMessageBox.about(self, 'About the Calibre Book Brainz Plugin',
+                text.decode('utf-8'))
+
     # def marked(self):
     #     ''' Show books with only one format '''
     #     db = self.db.new_api
