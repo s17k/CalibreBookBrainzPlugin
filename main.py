@@ -37,6 +37,11 @@ class DemoDialog(QDialog):
         self.setWindowIcon(icon)
 
         self.search_space =  QLineEdit()
+        self.selected_button = QPushButton('Use title from selected book', self)
+        self.selected_button.clicked.connect(self.exporttitlefromselected)
+        self.l.addWidget(self.selected_button)
+
+        self.search_space =  QLineEdit()
         self.l.addWidget(self.search_space)
 
         self.listWidget = QListWidget()
@@ -74,6 +79,14 @@ class DemoDialog(QDialog):
         # self.l.addWidget(self.conf_button)
         #
         self.resize(400,600)
+
+    def exporttitlefromselected(self):
+        rows = self.gui.current_view().selectionModel().selectedRows()
+        if len(rows) == 0:
+            self.search_space.setText("")
+        else:
+            mi = self.gui.library_view.model().db.get_metadata(rows[0].row())
+            self.search_space.setText(mi.title)
 
     def search(self):
         text=self.search_space.text()
