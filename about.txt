@@ -1,0 +1,7 @@
+The Calibre Book Brainz Plugin
+===========================
+
+Created by Stanisław Szcześniak
+
+Requires calibre >= 0.7.53
+
