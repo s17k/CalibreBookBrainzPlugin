@@ -7,7 +7,8 @@ __license__   = 'MIT'
 __copyright__ = '2015 Stanislaw Szczesniak'
 __docformat__ = 'restructuredtext en'
 
-from PyQt5.Qt import QDialog, QVBoxLayout, QPushButton, QMessageBox, QLabel, QLineEdit, QListWidget, QListWidgetItem
+from PyQt5.Qt import QDialog, QVBoxLayout, QPushButton, QMessageBox, QLabel, QLineEdit, QListWidget, QListWidgetItem, QBrush, QColor, QPainter
+import PyQt5.Qt
 import requests
 
 from calibre_plugins.CalibreBookBrainzPlugin.config import prefs
@@ -39,9 +40,9 @@ class DemoDialog(QDialog):
         self.l.addWidget(self.search_space)
 
         self.listWidget = QListWidget()
-        for i in range(10):
-            item = QListWidgetItem("Item %i" % i)
-            self.listWidget.addItem(item)
+        #for i in range(10):
+        #    item = QListWidgetItem("Item %i" % i)
+        #    self.listWidget.addItem(item)
         self.l.addWidget(self.listWidget)
 
         self.about_button = QPushButton('Search', self)
@@ -72,7 +73,7 @@ class DemoDialog(QDialog):
         # self.conf_button.clicked.connect(self.config)
         # self.l.addWidget(self.conf_button)
         #
-        self.resize(self.sizeHint())
+        self.resize(400,600)
 
     def search(self):
         text=self.search_space.text()
@@ -84,7 +85,18 @@ class DemoDialog(QDialog):
         numQueries = len(hits)
         for i in range(numQueries) :
             item = QListWidgetItem("%i. %s" %((i+1),hits[i]['_source']['default_alias']['name']))
+            Qcol = QColor()
+            if i%2==0:
+                Qcol.setRed(240)
+                Qcol.setGreen(255)
+                Qcol.setBlue(255)
+            else :
+                Qcol.setRed(220)
+                Qcol.setGreen(255)
+                Qcol.setBlue(240)
+            item.setBackground(QBrush(Qcol))
             self.listWidget.addItem(item)
+
         self.listWidget.setFocus()
 
 
